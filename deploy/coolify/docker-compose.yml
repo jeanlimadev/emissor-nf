@@ -1,9 +1,12 @@
 # Deploy no Coolify (um por ambiente: emissor-homolog e emissor-prod).
 # Contexto do build: a raiz do repositorio. Segredos pelas variaveis do Coolify.
+# O Coolify roda o compose com --project-directory na raiz do repositorio, entao os
+# caminhos relativos abaixo partem da raiz, e nao da pasta deste arquivo. Para testar
+# local: docker compose --project-directory . -f deploy/coolify/docker-compose.yml build
 services:
   api:
     build:
-      context: ../..
+      context: .
       dockerfile: src/host/Emissor.Api/Dockerfile
     restart: unless-stopped
     environment:
