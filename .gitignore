@@ -1,0 +1,20 @@
+# .NET build and test output
+**/bin/
+**/obj/
+artifacts/
+**/TestResults/
+*.trx
+*.coverage
+coverage/
+
+# Local tooling and temporary files
+.tmp/
+.vs/
+.idea/
+*.user
+
+# Segredos locais: certificados, senhas e configuracao do desenvolvedor
+*.pfx
+*.p12
+**/appsettings.Local.json
+.env

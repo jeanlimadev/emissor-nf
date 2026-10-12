@@ -1,0 +1,21 @@
+{
+  "dotnet.defaultSolution": "src/Emissor.slnx",
+  // Depurar testes pelo Test Explorer (C# Dev Kit) com a mesma variável que a API precisa nesta máquina.
+  "dotnet.unitTestDebuggingOptions": {
+    "justMyCode": true,
+    "env": {
+      "DOTNET_USE_POLLING_FILE_WATCHER": "1"
+    }
+  },
+  "files.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+  "search.exclude": {
+    "**/bin": true,
+    "**/obj": true
+  },
+  "[csharp]": {
+    "editor.formatOnSave": true
+  }
+}

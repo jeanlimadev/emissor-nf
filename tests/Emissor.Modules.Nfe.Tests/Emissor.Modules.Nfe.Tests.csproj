@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\modules\Nfe\Emissor.Modules.Nfe\Emissor.Modules.Nfe.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Certificado autoassinado dos testes de Emitentes: usado para assinar o XML nos testes. -->
+    <Compile Include="..\Emissor.Modules.Emitentes.Tests\CertificadoDeTeste.cs" Link="CertificadoDeTeste.cs" />
+  </ItemGroup>
+
+</Project>

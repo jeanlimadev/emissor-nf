@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- DTOs publicos da API e o cliente HTTP tipado (EmissorClient). Sem dependencias
+       alem da BCL: e o pacote que o ERP e os outros sistemas clientes referenciam.
+       Para gerar o pacote: dotnet pack src/contracts/Emissor.Contracts -c Release -o ./artefatos -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>Emissor.Contracts</PackageId>
+    <Version>0.5.0</Version>
+    <Authors>Jean Lima</Authors>
+    <Description>Contratos e cliente HTTP do emissor-nf (emissao de NF-e modelo 55).</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591;CS1573</NoWarn>
+  </PropertyGroup>
+
+</Project>

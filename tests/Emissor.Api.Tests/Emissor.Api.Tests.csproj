@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
+    <PackageReference Include="Testcontainers.PostgreSql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\host\Emissor.Api\Emissor.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- O gerador de certificado autoassinado dos testes do modulo, ligado e
+         nao referenciado: a classe e o que se quer, nao a suite inteira. -->
+    <Compile Include="..\Emissor.Modules.Emitentes.Tests\CertificadoDeTeste.cs" Link="CertificadoDeTeste.cs" />
+    <Compile Include="..\Emissor.Modules.Nfe.Tests\PedidosDeTeste.cs" Link="PedidosDeTeste.cs" />
+  </ItemGroup>
+
+</Project>

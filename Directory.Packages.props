@@ -1,0 +1,20 @@
+<Project>
+  <!-- Versoes centralizadas (Central Package Management): os csproj referenciam
+       o pacote sem versao, e a versao vive so aqui. -->
+  <ItemGroup>
+    <PackageVersion Include="FluentValidation" Version="12.2.0" />
+    <!-- DFe.NET (ZeusAutomacao): classes do layout 4.00 (com IBS/CBS) e servicos SOAP da SEFAZ. -->
+    <PackageVersion Include="Zeus.Net.NFe.NFCe" Version="2026.9.24.1416" />
+    <!-- DANFE em PDF (licenca Community: receita anual abaixo de US$ 1M; ver ADR-019). -->
+    <PackageVersion Include="QuestPDF" Version="2026.9.1" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.4" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.4" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.3.0" />
+    <!-- Testes -->
+    <PackageVersion Include="MSTest" Version="4.5.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.12" />
+    <PackageVersion Include="Testcontainers.PostgreSql" Version="4.16.0" />
+  </ItemGroup>
+</Project>

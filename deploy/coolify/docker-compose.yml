@@ -1,0 +1,51 @@
+# Deploy no Coolify (um por ambiente: emissor-homolog e emissor-prod).
+# Contexto do build: a raiz do repositorio. Segredos pelas variaveis do Coolify.
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: src/host/Emissor.Api/Dockerfile
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__Emissor: Host=db;Port=5432;Database=emissor;Username=emissor;Password=${POSTGRES_PASSWORD}
+      Admin__Token: ${ADMIN_TOKEN}
+      Certificados__ChaveMestra: ${CHAVE_MESTRA}
+      Database__MigrateOnStartup: "true"
+      Nfe__Worker__Ativo: "true"
+      Nfe__Sefaz__TimeoutSegundos: "30"
+      RateLimit__PorMinuto: "300"
+      Logging__Console__FormatterName: json
+      # Responsavel tecnico (infRespTec): preencha os quatro ou nenhum.
+      Nfe__ResponsavelTecnico__Cnpj: ${RESPTEC_CNPJ:-}
+      Nfe__ResponsavelTecnico__Contato: ${RESPTEC_CONTATO:-}
+      Nfe__ResponsavelTecnico__Email: ${RESPTEC_EMAIL:-}
+      Nfe__ResponsavelTecnico__Telefone: ${RESPTEC_TELEFONE:-}
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    # O Coolify expoe a porta 8080 pelo proxy com TLS; nao publique a porta direto.
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: emissor
+      POSTGRES_USER: emissor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U emissor -d emissor"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

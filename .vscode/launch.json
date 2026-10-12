@@ -1,0 +1,65 @@
+{
+  // Depuração da API: F5 compila e sobe o host com o depurador anexado.
+  // Breakpoints valem em qualquer projeto da solution (módulos, building-blocks, host).
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (debug)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: api",
+      "program": "${workspaceFolder}/src/host/Emissor.Api/bin/Debug/net10.0/Emissor.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/host/Emissor.Api",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      // Reaproveita o perfil "http" do launchSettings.json (porta 5176 e ambiente Development).
+      "launchSettingsProfile": "http",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        // A máquina tem o limite de instâncias de inotify estourado; sem isto a API cai ao carregar o appsettings.
+        "DOTNET_USE_POLLING_FILE_WATCHER": "1"
+      },
+      "justMyCode": true,
+      "requireExactSource": false,
+      "logging": {
+        "moduleLoad": false
+      }
+    },
+    {
+      "name": "API (debug + abrir Swagger)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: api",
+      "program": "${workspaceFolder}/src/host/Emissor.Api/bin/Debug/net10.0/Emissor.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/host/Emissor.Api",
+      "stopAtEntry": false,
+      "console": "internalConsole",
+      "launchSettingsProfile": "http",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_USE_POLLING_FILE_WATCHER": "1"
+      },
+      // Abre o Swagger no navegador assim que o Kestrel anuncia a porta.
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+        "uriFormat": "%s/swagger"
+      },
+      "justMyCode": true,
+      "requireExactSource": false,
+      "logging": {
+        "moduleLoad": false
+      }
+    },
+    {
+      // Para uma API já rodando (por exemplo, via `dotnet run` no terminal).
+      "name": "Anexar a processo .NET",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}",
+      "justMyCode": true
+    }
+  ]
+}

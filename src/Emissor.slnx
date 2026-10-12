@@ -1,0 +1,26 @@
+<Solution>
+  <Folder Name="/building-blocks/">
+    <Project Path="building-blocks/Emissor.BuildingBlocks/Emissor.BuildingBlocks.csproj" />
+  </Folder>
+  <Folder Name="/contracts/">
+    <Project Path="contracts/Emissor.Contracts/Emissor.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/host/">
+    <Project Path="host/Emissor.Api/Emissor.Api.csproj" />
+  </Folder>
+  <Folder Name="/modules/" />
+  <Folder Name="/modules/Emitentes/">
+    <Project Path="modules/Emitentes/Emissor.Modules.Emitentes/Emissor.Modules.Emitentes.csproj" />
+  </Folder>
+  <Folder Name="/modules/Nfe/">
+    <Project Path="modules/Nfe/Emissor.Modules.Nfe/Emissor.Modules.Nfe.csproj" />
+  </Folder>
+  <Folder Name="/modules/Tenancy/">
+    <Project Path="modules/Tenancy/Emissor.Modules.Tenancy/Emissor.Modules.Tenancy.csproj" />
+  </Folder>
+  <Project Path="../tests/Emissor.Api.Tests/Emissor.Api.Tests.csproj" />
+  <Project Path="../tests/Emissor.BuildingBlocks.Tests/Emissor.BuildingBlocks.Tests.csproj" />
+  <Project Path="../tests/Emissor.Modules.Emitentes.Tests/Emissor.Modules.Emitentes.Tests.csproj" />
+  <Project Path="../tests/Emissor.Modules.Nfe.Tests/Emissor.Modules.Nfe.Tests.csproj" />
+  <Project Path="../tests/Emissor.Modules.Tenancy.Tests/Emissor.Modules.Tenancy.Tests.csproj" />
+</Solution>
