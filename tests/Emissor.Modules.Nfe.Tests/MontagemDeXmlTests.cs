@@ -152,6 +152,24 @@ public sealed class MontagemDeXmlTests
     }
 
     [TestMethod]
+    public void Cst_de_ibs_cbs_tributado_sem_valores_e_erro_antes_da_sefaz()
+    {
+        // Rejeicao 1022 vista em homologacao: CST 200 com so CST e cClassTrib, sem gIBSCBS.
+        var pedido = PedidosDeTeste.PedidoSimples();
+        var item = pedido.Itens[0];
+        var semValores = new Contracts.Nfe.IbsCbsDto("200", "200003", null, null, null, null, null);
+        pedido = pedido with { Itens = [item with { Impostos = item.Impostos with { IbsCbs = semValores } }] };
+
+        var xml = Builder.Montar(Montagem(PedidosDeTeste.EmitentePj(), pedido));
+
+        Assert.IsTrue(xml.IsFailure);
+        StringAssert.Contains(xml.Error!.Details!["itens[0].impostos.ibsCbs.baseCalculo"][0], "1022");
+
+        // CST sem tributo (410) continua aceito so com CST e classificacao.
+        Assert.IsTrue(Builder.Montar(Montagem(PedidosDeTeste.EmitentePj(), PedidosDeTeste.PedidoSimples())).IsSuccess);
+    }
+
+    [TestMethod]
     public void Pagamento_que_nao_fecha_com_o_total_e_erro()
     {
         var pedido = PedidosDeTeste.PedidoRegimeNormal();

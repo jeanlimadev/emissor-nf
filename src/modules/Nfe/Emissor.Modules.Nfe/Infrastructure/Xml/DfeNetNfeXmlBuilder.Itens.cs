@@ -660,6 +660,14 @@ public sealed partial class DfeNetNfeXmlBuilder
 
         var temValores = dto.BaseCalculo is not null || dto.IbsUf is not null || dto.IbsMunicipal is not null || dto.Cbs is not null;
 
+        // CSTs de tributacao (integral, reduzida, diferimento, suspensao...) exigem o grupo gIBSCBS, mesmo com
+        // valores zerados; sem ele a SEFAZ rejeita com 1022. Quem nao tem tributo (400, 410, 8xx) nao o leva.
+        if (!temValores && CstsQueExigemValores.Contains((dto.Cst ?? string.Empty).Trim()))
+        {
+            contexto.Erro(campo("baseCalculo"), $"O CST {dto.Cst} do IBS/CBS exige o grupo de valores (baseCalculo, ibsUf, ibsMunicipal e cbs), mesmo zerados; sem ele a SEFAZ rejeita com 1022.");
+            return resultado;
+        }
+
         if (!temValores)
             return resultado;
 
@@ -708,6 +716,12 @@ public sealed partial class DfeNetNfeXmlBuilder
 
         return resultado;
     }
+
+    /// <summary>CSTs do IBS/CBS cuja tabela de grupos (NT 2025.002) pede o gIBSCBS.</summary>
+    private static readonly HashSet<string> CstsQueExigemValores = new(StringComparer.Ordinal)
+    {
+        "000", "010", "011", "200", "210", "220", "221", "222", "510", "515", "550"
+    };
 
     private static TributoIbsCbsDto Exigido(MapeamentoContexto contexto, string campo)
     {

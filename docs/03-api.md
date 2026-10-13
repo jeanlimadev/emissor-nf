@@ -111,7 +111,9 @@ Regras que o emissor aplica antes de montar o XML (a SEFAZ rejeitaria depois):
 - A soma dos pagamentos menos o troco tem que fechar com `vNF` (salvo forma 90, sem pagamento).
 - Em homologação o nome do destinatário é trocado pelo texto fixo que a SEFAZ exige.
 - `ibsCbs` é opcional por item (Simples Nacional entra na Reforma em 2027). Informando base ou
-  qualquer tributo, os grupos `ibsUf`, `ibsMunicipal` e `cbs` passam a ser obrigatórios.
+  qualquer tributo, os grupos `ibsUf`, `ibsMunicipal` e `cbs` passam a ser obrigatórios. E os CSTs
+  de tributação (000, 010, 011, 200, 210, 220, 221, 222, 510, 515, 550) **exigem** esses valores,
+  mesmo zerados: só CST e classificação dá rejeição 1022 na SEFAZ, então o emissor recusa antes.
 
 ### Erros de validação
 
