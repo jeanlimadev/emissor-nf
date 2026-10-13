@@ -45,7 +45,7 @@ header `X-Admin-Token`. Erros vêm em `ProblemDetails` com `code` estável.
 | POST | `/api/v1/emitentes/{id}/inutilizacoes` | Inutiliza faixa nunca usada: `{ "serie", "numeroInicial", "numeroFinal", "justificativa" }`. Só emitente CNPJ (o layout `inutNFe` não tem CPF). `cStat` 102 = homologada; a série pula a faixa. |
 | GET | `/api/v1/emitentes/{id}/inutilizacoes` | Inutilizações do emitente. |
 | GET | `/api/v1/emitentes/{id}/inutilizacoes/{inutilizacaoId}/xml` | `procInutNFe`. |
-| POST | `/api/v1/nfe/{id}/reenviar` | Nota rejeitada ou com falha volta para a fila. Corpo opcional: pedido corrigido. Número e série são mantidos; chave e XML são refeitos. Nota pendente de consulta aceita só sem corpo: antecipa a próxima tentativa. |
+| POST | `/api/v1/nfe/{id}/reenviar` | Nota rejeitada ou com falha volta para a fila. Corpo opcional: pedido corrigido. Número e série são mantidos; chave e XML são refeitos. Nota pendente de consulta aceita só sem corpo: antecipa a próxima tentativa. Rejeitada por **539** (número já usado por outra nota) ganha número novo no reenvio; rejeitada por **204** (a SEFAZ já tem esta chave) volta para consulta em vez de retransmitir. |
 | PUT | `/api/v1/webhook` | Configura o webhook do tenant: `{ "url", "segredo"? }`. Sem segredo, o emissor gera um e o devolve **uma única vez**. URL https (http só em localhost). |
 | GET | `/api/v1/webhook` | Webhook configurado (sem o segredo). |
 | DELETE | `/api/v1/webhook` | Remove o webhook. |

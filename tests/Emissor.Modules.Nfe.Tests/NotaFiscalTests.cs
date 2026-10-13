@@ -97,6 +97,44 @@ public sealed class NotaFiscalTests
     }
 
     [TestMethod]
+    public void Rejeitada_por_539_solta_o_numero_no_reenvio_e_por_204_volta_para_consulta()
+    {
+        // 539: o numero ja e de outra nota autorizada na SEFAZ; o reenvio precisa de numero novo.
+        var nota = Nova();
+        nota.IniciarProcessamento(Agora);
+        nota.DefinirNumeroEChave(1, Chave, Agora, Agora);
+        nota.DefinirXmlAssinado("<NFe/>", Agora);
+        nota.RegistrarRejeicao(539, "Rejeicao: Duplicidade de NF-e, com diferenca na Chave de Acesso", Agora);
+
+        Assert.IsTrue(nota.Reenviar(null, null, Agora).IsSuccess);
+        Assert.AreEqual(NfeStatus.Recebida, nota.Status);
+        Assert.IsNull(nota.Numero, "o numero consumido na SEFAZ nao e reaproveitado");
+        Assert.IsNull(nota.ChaveAcesso);
+
+        // Rejeicao comum: o numero fica.
+        var outra = Nova();
+        outra.IniciarProcessamento(Agora);
+        outra.DefinirNumeroEChave(7, Chave, Agora, Agora);
+        outra.RegistrarRejeicao(778, "NCM inexistente", Agora);
+        outra.Reenviar(null, null, Agora);
+        Assert.AreEqual(7, outra.Numero);
+
+        // 204: a SEFAZ ja tem esta chave; reenviar vira consulta, com chave e XML preservados.
+        var duplicada = Nova();
+        duplicada.IniciarProcessamento(Agora);
+        duplicada.DefinirNumeroEChave(9, Chave, Agora, Agora);
+        duplicada.DefinirXmlAssinado("<NFe/>", Agora);
+        duplicada.RegistrarRejeicao(204, "Rejeicao: Duplicidade de NF-e", Agora);
+
+        Assert.AreEqual("nfe.reenvio_pendente_com_pedido", duplicada.Reenviar("{}", "h", Agora).Error!.Code);
+        Assert.IsTrue(duplicada.Reenviar(null, null, Agora).IsSuccess);
+        Assert.AreEqual(NfeStatus.PendenteConsulta, duplicada.Status);
+        Assert.AreEqual(Chave.Valor, duplicada.ChaveAcesso);
+        Assert.AreEqual("<NFe/>", duplicada.XmlAssinado);
+        Assert.IsTrue(duplicada.Tentativas >= 1, "o worker so consulta antes de transmitir a partir da segunda tentativa");
+    }
+
+    [TestMethod]
     public void Pendente_de_consulta_reenviada_sem_corpo_so_antecipa_a_tentativa()
     {
         var nota = Nova();

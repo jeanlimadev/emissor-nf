@@ -209,11 +209,31 @@ public sealed class NotaFiscal : ITenantOwned
         if (Status is not (NfeStatus.Rejeitada or NfeStatus.Falha))
             return Result.Failure(NfeErrors.ReenvioNaoPermitido);
 
+        // 204 "Duplicidade de NF-e": a SEFAZ ja tem ESTA chave, ou seja, a nota foi autorizada e a resposta se
+        // perdeu. Reenviar com chave nova criaria a segunda nota; o certo e consultar. Chave e XML ficam.
+        if (CStat == CodigosSefaz.DuplicidadeDeNfe)
+        {
+            if (novoPedidoJson is not null)
+                return Result.Failure(NfeErrors.ReenvioPendenteComPedido);
+
+            Status = NfeStatus.PendenteConsulta;
+            Tentativas = Math.Max(Tentativas, 1);
+            ProximaTentativaEm = agora;
+            AtualizadaEm = agora;
+            return Result.Success();
+        }
+
         if (novoPedidoJson is not null && novoPedidoHash is not null)
         {
             PedidoJson = novoPedidoJson;
             PedidoHash = novoPedidoHash;
         }
+
+        // 539 "Duplicidade com diferenca na chave": o numero desta nota ja pertence a OUTRA nota autorizada na
+        // SEFAZ (serie que recomecou, numeracao de outro sistema). O numero esta perdido para esta nota: solta-o,
+        // e o worker reserva o proximo da serie. Qualquer outra rejeicao mantem o numero, que nunca foi usado.
+        if (CStat == CodigosSefaz.DuplicidadeComDiferencaNaChave)
+            Numero = null;
 
         Status = NfeStatus.Recebida;
         ChaveAcesso = null;
